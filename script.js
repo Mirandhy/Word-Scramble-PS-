@@ -10,6 +10,7 @@ const words = [
   { word: "apple", hint: "Fall favorite for picking." },
   { word: "tiger", hint: "It's a fierce predator." },
 ];
+/* reach for more random words such as list or pulling from internet*/
 
 let currentRound = 0;
 let triesLeft = 3;
@@ -33,7 +34,7 @@ guessButton.style.color = 'green';
 function scrambleWord(word) {
   let scrambled = word.split("").sort(() => Math.random() - 0.5).join("");
   return scrambled;
-}
+} /*scramble words */
 
 function displayScrambledWord() {
   let currentWord = words[currentRound];
@@ -44,7 +45,7 @@ function displayScrambledWord() {
 }
 
 function startRound() {
-  winMessage.style.display = "none"; /* Hide "Smarty!" message at the start */
+  winMessage.style.display = "none"; /* Hide "Smarty!" for rounds */
   if (currentRound < words.length) {
     displayScrambledWord();
     guessButton.disabled = false;
@@ -54,8 +55,8 @@ function startRound() {
     triesLeftE.textContent = triesLeft;
     startOverButton.disabled = true;
   } else {
-    /* Player wins */
-    winMessage.style.display = "block"; /* Show "Smarty!" */
+    /*Player wins*/
+    winMessage.style.display = "block"; /* Show "Smarty!" when won */
     guessButton.disabled = true;
     guessInputE.disabled = true;
     startOverButton.disabled = false;
@@ -66,18 +67,23 @@ function checkGuess() {
   let currentWord = words[currentRound];
   let guess = guessInputE.value.trim().toLowerCase();
   if (guess === currentWord.word) {
-    currentRound++;
-    if (currentRound >= roundsToWin) {
-      /* Player wins after 6*/
-      winMessage.style.display = "block";
-      guessButton.disabled = true;
-      guessInputE.disabled = true;
-      startOverButton.disabled = false;
-    } else {
-      /*  next round */
-      messageE.textContent = "Correct!";
-      startRound();
-    }
+    /* Right answer */
+    messageE.textContent = "Correct!";
+    setTimeout(() => {
+      messageE.textContent = ""; /* Clear after  delay*/
+      currentRound++;
+
+      if (currentRound >= roundsToWin) {
+        /* Player wins after 6 tries */
+        winMessage.style.display = "block";
+        guessButton.disabled = true;
+        guessInputE.disabled = true;
+        startOverButton.disabled = false;
+      } else {
+        /*Move to the next round */
+        startRound();
+      }
+    }, 1000); /* Display "Correct! one sec" */
   } else {
     triesLeft--;
     triesLeftE.textContent = triesLeft;
